@@ -1,3 +1,5 @@
+import Notes from "./Notes";
+
 const NotesList = () => {
     return (
         <div className="list">
