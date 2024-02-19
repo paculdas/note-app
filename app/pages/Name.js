@@ -6,18 +6,13 @@ import RoundButton from '../components/RoundButton.js';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage from @react-native-async-storage/async-storage
 
 const Name = () => {
-    const [user, userName] = useState('');
+    const [name, setName] = useState('');
 
     const submitData = async () => {
-        const username = { name: user } 
-        try {
-            await AsyncStorage.setItem('username', JSON.stringify(username));
-            console.log('Username saved successfully:', username);
-        } catch (error) {
-            console.error("Error saving username to AsyncStorage:", error);
-        }
+        const user = { name: name}; 
+        await AsyncStorage.setItem('user', JSON.stringify(user));
+        console.log('Username saved successfully:', user);
     }
-    
     
     return (
         <View style={styles.container}>
@@ -25,11 +20,11 @@ const Name = () => {
             <TextInput 
                 placeholder='Type here...' 
                 style={styles.inputBox}
-                value={user}
-                onChangeText={text => userName(text)}
+                value={name}
+                onChangeText={text => setName(text)}
             />
             <StatusBar hidden={true} />
-            {user.trim().length > 3 && (
+            {name.trim().length > 3 && (
                 <RoundButton 
                     iconDesignName="arrow-with-circle-right" 
                     onPress={submitData}

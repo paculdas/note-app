@@ -12,7 +12,7 @@ const NoteList = ({ user }) => {
             <StatusBar barStyle='dark-content' backgroundColor={colors.LIGHT} />
             <View style = {styles.header}>
                 <View style={styles.headerLeft}>
-                    <Text style={styles.userHeader}>{`Hello, ${user ? user.name : 'Anon'}`}</Text>
+                    <Text style={styles.userHeader}>{`Hello, ${user.name}`}</Text>
                 </View>
                 <View style={styles.headerRight}>
                     <RoundButton

@@ -8,24 +8,19 @@ import SearchBar from './app/components/SearchBar';
 
 export default function App() {
   const [user, setUser] = useState({});
+
   const findUser = async () => {
-    try {
-      const result = await AsyncStorage.getItem('username');
-      if (result !== null) {
-        console.log(result);
-        setUser(JSON.parse(result));
-      } else {
-        console.log("No username found in AsyncStorage");
-      }
-    } catch (error) {
-      console.error("Error retrieving username from AsyncStorage:", error);
-    }
+    const result = await AsyncStorage.getItem('user');
+    setUser(JSON.parse(result));
+    console.log(result);
   }
 
   useEffect(() => {
     findUser();
+    // AsyncStorage.clear();
   }, []);
 
+  if (!user) return <Name />
   return <NoteList user = {user}/>;
 }
 
