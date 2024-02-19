@@ -10,9 +10,13 @@ export default function App() {
   const [user, setUser] = useState({});
 
   const findUser = async () => {
-    const result = await AsyncStorage.getItem('user');
-    setUser(JSON.parse(result));
-    console.log(result);
+    try {
+      const result = await AsyncStorage.getItem('user');
+      setUser(JSON.parse(result));
+      console.log(result);
+    } catch (error) {
+      console.error('Error retrieving user from AsyncStorage:', error);
+    }
   }
 
   useEffect(() => {
@@ -20,7 +24,7 @@ export default function App() {
     // AsyncStorage.clear();
   }, []);
 
-  if (!user) return <Name />
+  // if (!user) return <Name />
   return <NoteList user = {user}/>;
 }
 
