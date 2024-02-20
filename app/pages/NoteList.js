@@ -8,6 +8,7 @@ import Note from '../components/Note';
 import NoteInputModal from '../components/Notepad.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNotes } from '../context/NoteProvider.js';
+import SearchScreen from './SearchScreen.js';
 
 const NoteList = ({ user, navigation }) => {
     const [modalVisible, setModalVisible] = useState(false);
@@ -25,6 +26,10 @@ const NoteList = ({ user, navigation }) => {
         navigation.navigate('NoteDetail', { note, updateNotes: setNotes });
     };
 
+    const openSearchScreen = () => {
+        navigation.navigate('SearchScreen', { notes: notes });
+    };
+
     return (
         <View style={styles.container}>
             <StatusBar barStyle='dark-content' backgroundColor={colors.LIGHT} />
@@ -36,14 +41,15 @@ const NoteList = ({ user, navigation }) => {
                     {notes.length ? (
                         <RoundButton
                             iconDesignName="magnifying-glass"
-                            style={styles.searchButton}
+                            style ={styles.searchButton}
+                            onPress = {openSearchScreen}
                         />
                     ): null}
-                    <RoundButton 
-                        iconDesignName='squared-plus' 
-                        style = {styles.addButton}
-                        onPress = {() => setModalVisible(true)}
-                    />
+                        <RoundButton 
+                            iconDesignName='squared-plus' 
+                            style = {styles.addButton}
+                            onPress = {() => setModalVisible(true)}
+                        />
                 </View>
             </View>
             <FlatList 

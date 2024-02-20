@@ -1,10 +1,10 @@
-import React, { useState } from 'react'; 
+import React, { useEffect, useState } from 'react'; 
 import { StatusBar } from 'expo-status-bar';
 import {View, StyleSheet, Modal, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import colors from '../misc/Colors';
 import RoundButton from './RoundButton';
 
-const NoteInputModal = ({ visible, onClose, onSubmit }) => {
+const NoteInputModal = ({ visible, onClose, onSubmit, note, isEdit }) => {
     const [title, setTitle] = useState('');
     const [desc, setDesc] = useState('');
 
@@ -19,17 +19,31 @@ const NoteInputModal = ({ visible, onClose, onSubmit }) => {
 
     const submitNote = () => {
         if(!title.trim() && !desc.trim()) return onClose();
-        onSubmit(title, desc);
-        setTitle('');
-        setDesc('');
+
+        if (isEdit) {
+            onSubmit(title, desc, Date.now());
+        } else {
+            onSubmit(title, desc);
+            setTitle('');
+            setDesc('');
+        }
         onClose();
     }
 
     const closeNote = () => {
-        setTitle('');
-        setDesc('');
+        if (!isEdit) {
+            setTitle('');
+            setDesc('');
+        }
         onClose();
     }
+
+    useEffect(() => {
+        if(isEdit){
+            setTitle(note.title);
+            setDesc(note.desc);
+        }
+    }, [isEdit])
 
     return (
         <View>
@@ -69,6 +83,7 @@ const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 20,
         paddingTop: 15,
+        borderColor: colors.PRIMARY,
     },
     input: {
       borderBottomWidth: 2,

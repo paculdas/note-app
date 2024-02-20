@@ -12,11 +12,12 @@ const SearchBar = () => {
 
 const styles = StyleSheet.create({
     container:{
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
     },
     searchBar: {
-        borderWidth: 0.5,
+        borderWidth: 2,
         borderColor: colors.PRIMARY,
+        color: colors.PRIMARY,
         height: 40,
         borderRadius: 40,
         paddingLeft: 15,
