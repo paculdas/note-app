@@ -26,7 +26,7 @@ const NoteList = ({ user, navigation }) => {
     };
 
     const openNote = note => {
-        navigation.navigate('NoteDetail', { note });
+        navigation.navigate('NoteDetail', { note, updateNotes: setNotes });
     };
 
     useEffect(() => {

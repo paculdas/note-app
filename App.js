@@ -31,13 +31,13 @@ export default function App() {
     // AsyncStorage.clear();
   }, []);
 
-  const renderNoteList = (props) => <NoteList {...props} user = {user} />
+  const RenderNoteList = (props) => <NoteList {...props} user = {user} />
 
   if (!user) return <Name onFinish = {findUser} />
   return (
     <NavigationContainer>
       <stack.Navigator screenOptions ={{ headerTitle: '', headerTransparent: true}}>
-        <stack.Screen component = {renderNoteList} name = "NoteList"/>
+        <stack.Screen component = {RenderNoteList} name = "NoteList"/>
         <stack.Screen component = {NoteDetail} name = "NoteDetail"/>
       </stack.Navigator>
     </NavigationContainer>

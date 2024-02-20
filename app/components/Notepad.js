@@ -80,9 +80,11 @@ const styles = StyleSheet.create({
         height: 40,
         marginBottom: 15,
         fontWeight: 'bold',
+        color: colors.PRIMARY,
     },
     desc: {
         height: 100,
+        color: colors.PRIMARY,
     },
     modalBG: {
         flex: 1,
