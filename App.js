@@ -20,11 +20,11 @@ export default function App() {
   }
 
   useEffect(() => {
-    findUser();
+    findUser()
     // AsyncStorage.clear();
   }, []);
 
-  // if (!user) return <Name />
+  if (!user) return <Name onFinish = {findUser} />
   return <NoteList user = {user}/>;
 }
 

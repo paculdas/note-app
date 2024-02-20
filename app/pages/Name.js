@@ -5,13 +5,14 @@ import colors from '../misc/Colors.js';
 import RoundButton from '../components/RoundButton.js';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage from @react-native-async-storage/async-storage
 
-const Name = () => {
+const Name = ({ onFinish }) => {
     const [name, setName] = useState('');
 
     const submitData = async () => {
         const user = { name: name}; 
         await AsyncStorage.setItem('user', JSON.stringify(user));
         console.log('Username saved successfully:', user);
+        if (onFinish) onFinish();
     }
     
     return (

@@ -1,12 +1,34 @@
-import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, View, Text, FlatList } from 'react-native';
 import colors from '../misc/Colors.js';
 import { StatusBar } from 'expo-status-bar';
 import RoundButton from '../components/RoundButton.js';
 import SearchBar from '../components/SearchBar.js';
-
+import Note from '../components/Note';
+import NoteInputModal from '../components/Notepad.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const NoteList = ({ user }) => {
+    const [modalVisible, setModalVisible] = useState(false);
+    const [notes, setNotes] = useState([]);
+
+    const submitData = async (title, desc) => {
+        const note = {id: Date.now(), title, desc, time: Date.now() };
+        const updatedNotes = [...notes, note];
+        setNotes(updatedNotes);
+        await AsyncStorage.setItem('notes', JSON.stringify(updatedNotes));
+    };
+
+    const findNotes = async () => {
+        const result = await AsyncStorage.getItem('notes');
+        console.log(result);
+        if (result !== null) setNotes(JSON.parse(result));
+    }
+
+    useEffect(() => {
+        findNotes();
+    }, []);
+
     return (
         <View style={styles.container}>
             <StatusBar barStyle='dark-content' backgroundColor={colors.LIGHT} />
@@ -22,14 +44,24 @@ const NoteList = ({ user }) => {
                     <RoundButton 
                         iconDesignName='squared-plus' 
                         style = {styles.addButton}
-                        onPress = {() => console.log('opening modal')}
+                        onPress = {() => setModalVisible(true)}
                     />
                 </View>
             </View>
-            <View style = {[StyleSheet.absoluteFillObject, styles.emptyHeadingContainer]}>
-                <Text style = {styles.emptyHeader}>Add Notes</Text>
-
-            </View>
+            <FlatList 
+                data = {notes} 
+                keyExtractor= {item => item.id.toString()}
+                renderItem = {({item}) => <Note item = {item} />}
+            />
+            {!notes.length ? (           
+                <View style = {[StyleSheet.absoluteFillObject, styles.emptyHeadingContainer]}>
+                    <Text style = {styles.emptyHeader}>Add Notes</Text>
+                </View>
+            ) : null}
+            <NoteInputModal 
+            visible = {modalVisible} 
+            onClose = {() => setModalVisible(false)} 
+            onSubmit={submitData}/>
         </View>
     );
 }
@@ -38,7 +70,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: colors.LIGHT,
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
     },
     header: {
         flexDirection: 'column',
