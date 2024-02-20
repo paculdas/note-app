@@ -1,58 +1,47 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage from @react-native-async-storage/async-storage
-
-import {createNativeStackNavigator} from '@react-navigation/native-stack'
+import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Name from './app/pages/Name';
-import Note from './app/components/Note';
 import NoteList from './app/pages/NoteList';
 import NoteDetail from './app/components/NoteDetail';
 import NoteProvider from './app/context/NoteProvider';
+import SearchScreen from './app/pages/SearchScreen';
 
 export default function App() {
   const stack = createNativeStackNavigator();
   
-  const [user, setUser] = useState({});
+  const [user, setUser] = React.useState({});
 
   const findUser = async () => {
     try {
       const result = await AsyncStorage.getItem('user');
       setUser(JSON.parse(result));
-      console.log(result);
     } catch (error) {
       console.error('Error retrieving user from AsyncStorage:', error);
     }
   }
 
-  useEffect(() => {
-    findUser()
-    // AsyncStorage.clear();
+  React.useEffect(() => {
+    findUser();
   }, []);
 
-  const RenderNoteList = (props) => <NoteList {...props} user = {user} />
-
-  if (!user) return <Name onFinish = {findUser} />
+  if (!user) return <Name onFinish={findUser} />;
+  
   return (
     <NavigationContainer>
       <NoteProvider>
-
-        <stack.Navigator screenOptions ={{ headerTitle: '', headerTransparent: true}}>
-          <stack.Screen component = {RenderNoteList} name = "NoteList"/>
-          <stack.Screen component = {NoteDetail} name = "NoteDetail"/>
+        <stack.Navigator screenOptions={{ headerTitle: '', headerTransparent: true }}>
+          <stack.Screen name="NoteList">
+            {props => <NoteList {...props} user={user} />}
+          </stack.Screen>
+          <stack.Screen name="NoteDetail" component={NoteDetail} />
+          <stack.Screen name="SearchScreen">
+            {props => <SearchScreen {...props} user={user} />}
+          </stack.Screen>
         </stack.Navigator>
-
       </NoteProvider>
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

@@ -13,7 +13,7 @@ import SearchScreen from './SearchScreen.js';
 const NoteList = ({ user, navigation }) => {
     const [modalVisible, setModalVisible] = useState(false);
 
-    const{ notes, setNotes, } = useNotes();
+    const{ notes, setNotes } = useNotes();
 
     const submitData = async (title, desc) => {
         const note = {id: Date.now(), title, desc, time: Date.now() };
