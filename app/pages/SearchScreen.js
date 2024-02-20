@@ -1,4 +1,3 @@
-// SearchScreen.js
 import React, { useState } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 import colors from '../misc/Colors';
@@ -10,7 +9,7 @@ import Note from '../components/Note';
 const SearchScreen = ({ navigation }) => {
     const headerHeight = useHeaderHeight();
     const { notes } = useNotes();
-    const [searchedNotes, setSearchedNotes] = useState([]); // State to hold the filtered notes based on search
+    const [searchedNotes, setSearchedNotes] = useState([]); 
 
     const openNote = note => {
         navigation.navigate('NoteDetail', { note });
@@ -19,11 +18,11 @@ const SearchScreen = ({ navigation }) => {
     const searchNotes = query => {
         const filtered = notes.filter(note => {
             if (!query || query.trim() === "") {
-                return false; // Return false if query is empty or whitespace
+                return false;
             }
             const titleMatch = note.title.toLowerCase().includes(query.toLowerCase());
             const descMatch = note.desc.toLowerCase().includes(query.toLowerCase());
-            return titleMatch || descMatch; // Return true if either title or desc matches the query
+            return titleMatch || descMatch;
         });
         setSearchedNotes(filtered);
     };
