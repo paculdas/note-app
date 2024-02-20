@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { StyleSheet, View, Text, FlatList } from 'react-native';
 import colors from '../misc/Colors.js';
 import { StatusBar } from 'expo-status-bar';
@@ -7,10 +7,12 @@ import SearchBar from '../components/SearchBar.js';
 import Note from '../components/Note';
 import NoteInputModal from '../components/Notepad.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNotes } from '../context/NoteProvider.js';
 
 const NoteList = ({ user, navigation }) => {
     const [modalVisible, setModalVisible] = useState(false);
-    const [notes, setNotes] = useState([]);
+
+    const{ notes, setNotes, } = useNotes();
 
     const submitData = async (title, desc) => {
         const note = {id: Date.now(), title, desc, time: Date.now() };
@@ -19,20 +21,9 @@ const NoteList = ({ user, navigation }) => {
         await AsyncStorage.setItem('notes', JSON.stringify(updatedNotes));
     };
 
-    const findNotes = async () => {
-        const result = await AsyncStorage.getItem('notes');
-        console.log(result);
-        if (result !== null) setNotes(JSON.parse(result));
-    };
-
     const openNote = note => {
         navigation.navigate('NoteDetail', { note, updateNotes: setNotes });
     };
-
-    useEffect(() => {
-        findNotes();
-        // AsyncStorage.clear();
-    }, []);
 
     return (
         <View style={styles.container}>
@@ -92,7 +83,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         flexDirection: 'row',
         justifyContent: 'flex-end',
-        paddingRight: 0,
+        paddingVertical: 15,
     },
     userHeader: {
         color: colors.PRIMARY,

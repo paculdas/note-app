@@ -10,6 +10,7 @@ import Name from './app/pages/Name';
 import Note from './app/components/Note';
 import NoteList from './app/pages/NoteList';
 import NoteDetail from './app/components/NoteDetail';
+import NoteProvider from './app/context/NoteProvider';
 
 export default function App() {
   const stack = createNativeStackNavigator();
@@ -36,10 +37,14 @@ export default function App() {
   if (!user) return <Name onFinish = {findUser} />
   return (
     <NavigationContainer>
-      <stack.Navigator screenOptions ={{ headerTitle: '', headerTransparent: true}}>
-        <stack.Screen component = {RenderNoteList} name = "NoteList"/>
-        <stack.Screen component = {NoteDetail} name = "NoteDetail"/>
-      </stack.Navigator>
+      <NoteProvider>
+
+        <stack.Navigator screenOptions ={{ headerTitle: '', headerTransparent: true}}>
+          <stack.Screen component = {RenderNoteList} name = "NoteList"/>
+          <stack.Screen component = {NoteDetail} name = "NoteDetail"/>
+        </stack.Navigator>
+
+      </NoteProvider>
     </NavigationContainer>
   );
 }

@@ -4,31 +4,24 @@ import colors from '../misc/Colors';
 import {useHeaderHeight} from '@react-navigation/elements';
 import RoundButton from './RoundButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNotes } from '../context/NoteProvider';
 
 const NoteDetail = props => {
     const { note } = props.route.params;
     const headerHeight = useHeaderHeight();
+    const { notes, updateNotes } = useNotes();
 
     const deleteNote = async () => {
         try {
-            const result = await AsyncStorage.getItem('notes');
-            let notes = [];
-            if (result !== null) notes = JSON.parse(result);
-    
             const newNotes = notes.filter(n => n.id !== note.id);
             await AsyncStorage.setItem('notes', JSON.stringify(newNotes));
-    
-            // Check if updateNotes is a function before calling it
-            if (props.route.params.updateNotes && typeof props.route.params.updateNotes === 'function') {
-                props.route.params.updateNotes(newNotes);
-            }
-    
-            // Navigate back after deleting the note
+            updateNotes(newNotes); // Update the notes state using the context
             props.navigation.goBack();
         } catch (error) {
             console.error('Error deleting note:', error);
         }
     };
+
     
     
     
