@@ -1,12 +1,19 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import Name from './app/pages/Name';
-import NoteList from './app/pages/NoteList';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage from @react-native-async-storage/async-storage
-import SearchBar from './app/components/SearchBar';
+
+import {createNativeStackNavigator} from '@react-navigation/native-stack'
+import { NavigationContainer } from '@react-navigation/native';
+
+import Name from './app/pages/Name';
+import Note from './app/components/Note';
+import NoteList from './app/pages/NoteList';
+import NoteDetail from './app/components/NoteDetail';
 
 export default function App() {
+  const stack = createNativeStackNavigator();
+  
   const [user, setUser] = useState({});
 
   const findUser = async () => {
@@ -24,8 +31,17 @@ export default function App() {
     // AsyncStorage.clear();
   }, []);
 
+  const renderNoteList = (props) => <NoteList {...props} user = {user} />
+
   if (!user) return <Name onFinish = {findUser} />
-  return <NoteList user = {user}/>;
+  return (
+    <NavigationContainer>
+      <stack.Navigator screenOptions ={{ headerTitle: '', headerTransparent: true}}>
+        <stack.Screen component = {renderNoteList} name = "NoteList"/>
+        <stack.Screen component = {NoteDetail} name = "NoteDetail"/>
+      </stack.Navigator>
+    </NavigationContainer>
+  );
 }
 
 const styles = StyleSheet.create({

@@ -1,19 +1,19 @@
 import React from 'react';
-import {View, StyleSheet, Text } from 'react-native';
+import {View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import colors from '../misc/Colors';
 
-const Note = ( {item} ) => {
+const Note = ( {item, onPress} ) => {
     const {title, desc} = item;
 
     return (
-        <View style = {styles.container}>
+        <TouchableOpacity onPress = {onPress} style = {styles.container}>
             <Text 
             style = {styles.title} 
             numberOfLines={2}>{title}</Text>
             <Text 
             style = {styles.desc} 
             numberOfLines={3}>{desc}</Text>
-        </View>
+        </TouchableOpacity>
     )
 }
 
@@ -27,6 +27,9 @@ const styles = StyleSheet.create({
     title: {
         fontWeight: 'bold',
         fontSize: 16,
+        color: colors.LIGHT,
+    },
+    desc: {
         color: colors.LIGHT,
     },
 })

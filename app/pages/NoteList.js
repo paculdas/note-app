@@ -8,7 +8,7 @@ import Note from '../components/Note';
 import NoteInputModal from '../components/Notepad.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const NoteList = ({ user }) => {
+const NoteList = ({ user, navigation }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [notes, setNotes] = useState([]);
 
@@ -23,10 +23,15 @@ const NoteList = ({ user }) => {
         const result = await AsyncStorage.getItem('notes');
         console.log(result);
         if (result !== null) setNotes(JSON.parse(result));
-    }
+    };
+
+    const openNote = note => {
+        navigation.navigate('NoteDetail', { note });
+    };
 
     useEffect(() => {
         findNotes();
+        // AsyncStorage.clear();
     }, []);
 
     return (
@@ -37,10 +42,12 @@ const NoteList = ({ user }) => {
                     <Text style={styles.userHeader}>{`Hello, ${user.name}`}</Text>
                 </View>
                 <View style={styles.headerRight}>
-                    <RoundButton
-                        iconDesignName="magnifying-glass"
-                        style={styles.searchButton}
-                    />
+                    {notes.length ? (
+                        <RoundButton
+                            iconDesignName="magnifying-glass"
+                            style={styles.searchButton}
+                        />
+                    ): null}
                     <RoundButton 
                         iconDesignName='squared-plus' 
                         style = {styles.addButton}
@@ -51,7 +58,7 @@ const NoteList = ({ user }) => {
             <FlatList 
                 data = {notes} 
                 keyExtractor= {item => item.id.toString()}
-                renderItem = {({item}) => <Note item = {item} />}
+                renderItem = {({item}) => <Note onPress = {() => openNote(item)} item = {item} />}
             />
             {!notes.length ? (           
                 <View style = {[StyleSheet.absoluteFillObject, styles.emptyHeadingContainer]}>
